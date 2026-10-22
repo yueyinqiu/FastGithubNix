@@ -1,0 +1,1 @@
+FastGithub's code quality is absolutely terrible; never try this.
