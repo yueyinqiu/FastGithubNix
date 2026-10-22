@@ -7,17 +7,17 @@ Nix packaging for [FastGithub](https://github.com/yuan71058/FastGithub) — a Gi
 ```nix
 {
   inputs = {
-    fastgithub.url = "github:yueyinqiu/FastGithub-Nix";
+    fast-github.url = "github:yueyinqiu/FastGithub-Nix";
   };
 }
 ```
 
 ## Package
 
-The binary is exposed as `fastgithub`:
+The binary is exposed as `fast-github`:
 
 ```nix
-fastgithub.packages.${system}.fastgithub
+fast-github.packages.${system}.fast-github
 ```
 
 Or try it directly from the CLI:
@@ -32,7 +32,7 @@ FastGithub runs as a normal user (it only listens on the non-privileged local
 ports `38457` and `5533+`):
 
 ```console
-$ fastgithub
+$ fast-github
 ```
 
 Then set your system proxy (or the proxy of the process you want to accelerate)

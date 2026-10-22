@@ -20,7 +20,7 @@
           package = nixpkgs.legacyPackages.${system}.callPackage ./package { };
         in
         {
-          fastgithub = package;
+          fast-github = package;
           default = package;
         }
       );

@@ -6,7 +6,7 @@
 }:
 
 buildDotnetModule (finalAttrs: {
-  pname = "fastgithub";
+  pname = "fast-github";
   version = "2.3.2";
 
   src = fetchFromGitHub {
@@ -52,6 +52,7 @@ buildDotnetModule (finalAttrs: {
   # state dir and exec it from there (it writes cacert/, rewrites dnscrypt-proxy.toml,
   # and caches IPs relative to that dir).
   postFixup = ''
+    rm -f "$out/bin/fastgithub"
     cat > "$out/bin/${finalAttrs.pname}" <<'WRAPPER'
     #!/usr/bin/env bash
     set -euo pipefail
@@ -82,7 +83,7 @@ buildDotnetModule (finalAttrs: {
     description = "GitHub acceleration tool that solves GitHub inaccessibility, avatar and release loading failures, and git clone/pull/push issues in mainland China.";
     homepage = "https://github.com/yuan71058/FastGithub";
     license = lib.licenses.mit;
-    mainProgram = "fastgithub";
+    mainProgram = "fast-github";
     # runtimeId is pinned to linux-x64, so only x86_64-linux is supported.
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
