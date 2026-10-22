@@ -10,9 +10,19 @@
     hash = "sha256-OEDXXjQ1HDRPiA4Y1zPr1xUeH6wlzTCJpts+DZL61wI=";
   })
   (fetchNuGet {
+    pname = "Microsoft.AspNetCore.App.Runtime.linux-arm64";
+    version = "7.0.20";
+    hash = "sha256-ewal9R6o20GV0R02ylSijVFdWZAbdN8TK1PCc/ltHBQ=";
+  })
+  (fetchNuGet {
     pname = "Microsoft.AspNetCore.App.Runtime.linux-x64";
     version = "7.0.20";
     hash = "sha256-vq59xMfrET8InzUhkAsbs2xp3ML+SO9POsbwAiYKzkA=";
+  })
+  (fetchNuGet {
+    pname = "Microsoft.AspNetCore.App.Runtime.osx-arm64";
+    version = "7.0.20";
+    hash = "sha256-PHBb0AuRpB8kkQvQJIJSLu5Ub/U2pYA0wMGBarUkS8o=";
   })
   (fetchNuGet {
     pname = "Microsoft.AspNetCore.App.Runtime.win-x64";
@@ -365,9 +375,19 @@
     hash = "sha256-AGnfNNDvZDGZ0Er9JQxeyLoUbVH+jfXF3anFr12qk6w=";
   })
   (fetchNuGet {
+    pname = "Microsoft.NETCore.App.Host.linux-arm64";
+    version = "7.0.20";
+    hash = "sha256-/20dMbO1Ft0WVhl+Lv1916Thvr4kPP9LuuX4bKE+czE=";
+  })
+  (fetchNuGet {
     pname = "Microsoft.NETCore.App.Host.linux-x64";
     version = "7.0.20";
     hash = "sha256-Y1Dg8Sqhya86xD+9aJOuznT4mJUyFmoF/YZc0+5LBdc=";
+  })
+  (fetchNuGet {
+    pname = "Microsoft.NETCore.App.Host.osx-arm64";
+    version = "7.0.20";
+    hash = "sha256-MTyRTWhDmMaCsNorju/tLb0w+ssKydDX/NBFzSfqB0Q=";
   })
   (fetchNuGet {
     pname = "Microsoft.NETCore.App.Host.win-x64";
@@ -380,9 +400,19 @@
     hash = "sha256-W9RU3bja4BQLAbsaIhANQPJJh6DycDiBR+WZ3mK6Zrs=";
   })
   (fetchNuGet {
+    pname = "Microsoft.NETCore.App.Runtime.linux-arm64";
+    version = "7.0.20";
+    hash = "sha256-TemMvbNrDzJVHWwxVgnNN2CnTyI6TcvvZDpF4ts6IAw=";
+  })
+  (fetchNuGet {
     pname = "Microsoft.NETCore.App.Runtime.linux-x64";
     version = "7.0.20";
     hash = "sha256-L+WaGvoXVMT3tZ7R5xFE06zaLcC3SI7LEf4ATBkUAGQ=";
+  })
+  (fetchNuGet {
+    pname = "Microsoft.NETCore.App.Runtime.osx-arm64";
+    version = "7.0.20";
+    hash = "sha256-VHmF1/ObK5hxGYvm5/+pTdketHnxxcnAGK5RaTQpVqE=";
   })
   (fetchNuGet {
     pname = "Microsoft.NETCore.App.Runtime.win-x64";

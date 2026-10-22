@@ -23,9 +23,10 @@ buildDotnetModule (finalAttrs: {
   # SDK instead of depending on the insecure .NET 7 SDK/runtime.
   selfContainedBuild = true;
 
-  # Limit to a single RID so fetch-deps only downloads the runtime packs for
-  # this platform instead of every platform in meta.platforms.
-  runtimeId = "linux-x64";
+  # runtimeId is left unset so buildDotnetModule picks `systemToDotnetRid` per
+  # target platform, which also overrides the win-x64 hard-coded in
+  # Directory.Build.props. meta.platforms below is what bounds fetch-deps to
+  # only the runtime packs we actually need.
 
   # Only wrap the fastgithub executable; otherwise buildDotnetModule would
   # also wrap the self-contained runtime natives and the (non-.NET) dnscrypt-proxy.
@@ -68,7 +69,7 @@ buildDotnetModule (finalAttrs: {
       cp -r "$libdir/." "$statedir/"
       chmod -R u+w "$statedir"
       chmod +x "$statedir/fastgithub" "$statedir/dnscrypt-proxy/dnscrypt-proxy"
-      printf '%s\n' "${finalAttrs.version}" > "$statedir/.version"
+      echo "${finalAttrs.version}" > "$statedir/.version"
     fi
 
     exec "$statedir/fastgithub" "$@"
@@ -84,8 +85,9 @@ buildDotnetModule (finalAttrs: {
     homepage = "https://github.com/yuan71058/FastGithub";
     license = lib.licenses.mit;
     mainProgram = "fast-github";
-    # runtimeId is pinned to linux-x64, so only x86_64-linux is supported.
-    platforms = [ "x86_64-linux" ];
+    # platforms defaults to dotnet-sdk's (x86_64-linux, aarch64-linux,
+    # aarch64-darwin), which is exactly the set FastGithub ships dnscrypt-proxy
+    # binaries for and .NET 7 has runtime packs for.
     maintainers = [ ];
   };
 })
