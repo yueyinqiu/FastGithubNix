@@ -17,7 +17,7 @@ buildDotnetModule (finalAttrs: {
   };
 
   projectFile = "FastGithub/FastGithub.csproj";
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   # FastGithub targets net7.0 (EOL), so build it self-contained with a newer
   # SDK instead of depending on the insecure .NET 7 SDK/runtime.
