@@ -39,6 +39,10 @@ buildDotnetModule (finalAttrs: {
   # certificate explicitly instead of silently disabling verification.
   postPatch = ''
     sed -i '/GitConfigSslverify(false);/d' FastGithub.HttpServer/Certs/CertService.cs
+    # FastGithub forces its working directory to the program directory. Drop
+    # that so the wrapper can point CWD at a writable state dir (the store is
+    # read-only), while ContentRootPath stays in the store for appsettings.json.
+    sed -i '/Environment\.CurrentDirectory = contentRoot;/d' FastGithub/Program.cs
   '';
 
   # dnscrypt-proxy is a prebuilt binary shipped in the repo; it loses its
@@ -47,11 +51,10 @@ buildDotnetModule (finalAttrs: {
     chmod +x "$out/lib/${finalAttrs.pname}/dnscrypt-proxy/dnscrypt-proxy"
   '';
 
-  # FastGithub hard-codes `Environment.CurrentDirectory = Path.GetDirectoryName(Environment.ProcessPath)`
-  # in Program.cs, so it always runs from its own install directory. Since the Nix
-  # store is read-only, the wrapper must copy the whole program into a writable
-  # state dir and exec it from there (it writes cacert/, rewrites dnscrypt-proxy.toml,
-  # and caches IPs relative to that dir).
+  # FastGithub resolves cacert/, dnscrypt-proxy/, dnsendpoints.json, logs/ and
+  # appsettings/ relative to its working directory. With the Program.cs patch
+  # above, CWD is whatever the wrapper sets, so point it at a writable state
+  # dir and symlink the read-only resources there (the store stays read-only).
   postFixup = ''
     rm -f "$out/bin/fastgithub"
     cat > "$out/bin/${finalAttrs.pname}" <<'WRAPPER'
@@ -64,15 +67,15 @@ buildDotnetModule (finalAttrs: {
       statedir="$HOME/.local/state/fastgithub"
     fi
 
-    if [ ! -x "$statedir/fastgithub" ] || [ "$(cat "$statedir/.version" 2>/dev/null || true)" != "${finalAttrs.version}" ]; then
-      mkdir -p "$statedir"
-      cp -r "$libdir/." "$statedir/"
-      chmod -R u+w "$statedir"
-      chmod +x "$statedir/fastgithub" "$statedir/dnscrypt-proxy/dnscrypt-proxy"
-      echo "${finalAttrs.version}" > "$statedir/.version"
-    fi
+    mkdir -p "$statedir/dnscrypt-proxy"
+    # Read-only resources: symlink into the writable state dir.
+    ln -sfn "$libdir/appsettings" "$statedir/appsettings"
+    ln -sfn "$libdir/dnscrypt-proxy/dnscrypt-proxy" "$statedir/dnscrypt-proxy/dnscrypt-proxy"
+    # dnscrypt-proxy.toml is rewritten at startup, so it needs a writable copy.
+    [ -e "$statedir/dnscrypt-proxy/dnscrypt-proxy.toml" ] || install -m 644 "$libdir/dnscrypt-proxy/dnscrypt-proxy.toml" "$statedir/dnscrypt-proxy/"
 
-    exec "$statedir/fastgithub" "$@"
+    cd "$statedir"
+    exec "$libdir/fastgithub" "$@"
     WRAPPER
     chmod +x "$out/bin/${finalAttrs.pname}"
   '';
